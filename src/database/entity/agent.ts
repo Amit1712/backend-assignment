@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, BaseEntity } from 'typeorm'
 import { Division } from './division'
 
 @Entity('agents')
-export class Agent {
+export class Agent extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Division)
+  @ManyToOne(() => Division)
   @JoinColumn()
   division: Division;
 }

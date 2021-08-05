@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, BaseEntity, ManyToOne } from 'typeorm'
 import { Division } from './division'
 
 @Entity('messages')
-export class Message {
+export class Message extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,7 +10,7 @@ export class Message {
   @Column()
   content: string;
 
-  @OneToOne(() => Division)
+  @ManyToOne(() => Division)
   @JoinColumn()
   division: Division;
 

@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, OneToOne, JoinColumn, BaseEntity } from 'typeorm'
 import { Message } from './message'
 import { Agent } from './agent'
 
 @Entity('dispatches')
-export class Dispatch {
+export class Dispatch extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -12,7 +12,7 @@ export class Dispatch {
   @JoinColumn()
   message: Message;
 
-  @OneToOne(() => Agent)
+  @ManyToOne(() => Agent)
   @JoinColumn()
   agent: Agent;
 
