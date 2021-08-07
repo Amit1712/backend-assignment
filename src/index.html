@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REST Client</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .container {
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+
+  label,
+  input[type="submit"] {
+    margin-top: 20px;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <form>
+      <h1>Dispatcher</h1>
+      <input type="submit" value="Click" />
+    </form>
+  </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  document.addEventListener('submit', dispatch)
+
+  async function dispatch(e) {
+    e.preventDefault();
+    const res = await axios.get('/api/messages');
+    const messages = res.data;
+    const {
+      data
+    } = await axios.get('api/agents');
+    const agents = data;
+    for (let message of messages) {
+      for (let agent of agents) {
+        if (message.division) {
+          if (message.division.id === agent.division.id) {
+            const newDispatch = {
+              message: message.id,
+              agent: agent.id
+            }
+            message.done = true;
+            const res = await axios.post('/api/dispatches', newDispatch);
+            console.log('New dispatch created:', res.data)
+          }
+        }
+      }
+    }
+  }
+</script>
+
+</html>

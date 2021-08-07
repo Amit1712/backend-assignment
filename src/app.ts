@@ -1,4 +1,5 @@
 import express, { Express } from 'express';
+import path from 'path';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -34,6 +35,10 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'productio
 
 RegisterRoutes(app);
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
+
 app.use("/docs", swaggerUi.serve, async (req: express.Request, res: express.Response) => {
   return res.send(swaggerUi.generateHTML(await import("../tsoa/swagger.json")));
 });
@@ -47,7 +52,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
     console.error(`Caught Validation Error for ${req.path}:`, err.fields);
     return res.status(422).json({
       message: "Validation Failed",
-      details: err?.fields,
+      details: err ?.fields,
     });
   }
   if (err instanceof Error) {
